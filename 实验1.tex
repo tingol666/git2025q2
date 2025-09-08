@@ -1,0 +1,241 @@
+\documentclass[12pt]{ctexart}
+\usepackage{geometry}
+\geometry{a4paper,margin=2.5cm}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+  citecolor=blue
+}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  columns=fullflexible
+}
+
+\title{Git 与 \LaTeX 实验报告}
+\author{王杰（23160001074）}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+
+\section{实验目的}
+\begin{itemize}
+  \item 掌握 Git 
+  \item 掌握 \LaTeX
+\end{itemize}
+
+\section{实验环境}
+\begin{itemize}
+  \item 操作系统：Windows
+  \item Git：\texttt{git}
+  \item 编译器： \textbf{XeLaTeX}
+  \item 编辑器： Overleaf 
+\end{itemize}
+
+\section{练习内容}
+
+\subsection{Git}
+\begin{enumerate}
+
+  \item \textbf{初始化仓库}
+        \begin{lstlisting}
+mkdir test1
+cd test1
+git init
+        \end{lstlisting}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\linewidth]{image00.png}
+\end{figure}
+  \item \textbf{配置用户名邮箱}
+        \begin{lstlisting}
+git config --global user.name "Your Name"
+git config --global user.email you@example.com
+git config --list
+        \end{lstlisting}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\linewidth]{image0.png}
+\end{figure}
+
+  \item \textbf{查看状态 \& 新建文件}
+        \begin{lstlisting}
+echo "hello" > a.txt
+git status
+        \end{lstlisting}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\linewidth]{image2.png}
+\end{figure}
+
+  \item \textbf{暂存文件}
+        \begin{lstlisting}
+git add a.txt
+git status
+
+        \end{lstlisting}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\linewidth]{image3.png}
+\end{figure}
+
+  \item \textbf{提交快照}
+        \begin{lstlisting}
+git commit -m "add a.txt"
+git log --oneline
+        \end{lstlisting}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\linewidth]{image4.png}
+\end{figure}
+
+  \item \textbf{忽略文件}
+        \begin{lstlisting}
+echo "*.log" > .gitignore
+echo "temp.log" > temp.log
+git status
+        \end{lstlisting}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\linewidth]{image.png}
+\end{figure}
+
+  \item \textbf{对比差异}
+        \begin{lstlisting}
+echo "world" >> a.txt
+git diff
+        \end{lstlisting}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{image5.png}
+\end{figure}
+
+  \item \textbf{创建与切换分支}
+        \begin{lstlisting}
+git checkout -b feature-1
+echo "feature" >> a.txt
+git add a.txt
+git commit -m "feature note"
+        \end{lstlisting}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{image6.png}
+\end{figure}
+
+  \item \textbf{合并分支}
+        \begin{lstlisting}
+git checkout master   # 或 main
+git merge feature-1
+git log --oneline --graph --all
+        \end{lstlisting}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{image7.png}
+\end{figure}
+
+  \item \textbf{连接远程并推送}
+        \begin{lstlisting}
+git remote add origin <远程URL>
+git push -u origin master   # 或 main
+        \end{lstlisting}
+\end{enumerate}
+
+\subsection{\LaTeX（10 个）}
+\begin{enumerate}
+  \item \textbf{最小文档}
+\begin{lstlisting}
+\documentclass{article}
+\begin{document}
+Hello, \LaTeX!
+\end{document}
+\end{lstlisting}
+
+  \item \textbf{中文文档（ctex）}
+\begin{lstlisting}
+\documentclass{ctexart}
+\begin{document}
+这是中文测试。
+\end{document}
+\end{lstlisting}
+
+  \item \textbf{章节结构}
+\begin{lstlisting}
+\section{实验目的}
+\subsection{环境}
+\end{lstlisting}
+
+  \item \textbf{数学公式}
+\begin{lstlisting}
+Einstein: $E=mc^2$
+\[
+\int_0^1 x^2\,dx = \frac{1}{3}
+\]
+\end{lstlisting}
+
+  \item \textbf{有序/无序列表}
+\begin{lstlisting}
+\begin{enumerate}\item A \item B\end{enumerate}
+\begin{itemize}\item A \item B\end{itemize}
+\end{lstlisting}
+
+  \item \textbf{插入代码（listings）}
+\begin{lstlisting}
+\begin{lstlisting}
+git status
+git commit -m "msg"
+\end{lstlisting}
+
+  \item \textbf{插入图片（graphicx）}
+\begin{lstlisting}
+\includegraphics[width=.5\linewidth]{logo.png}
+\end{lstlisting}
+
+  \item \textbf{插入表格}
+\begin{lstlisting}
+\begin{tabular}{l r}
+项目 & 数值\\\hline
+提交数 & 5
+\end{tabular}
+\end{lstlisting}
+
+  \item \textbf{参考文献}
+\begin{lstlisting}
+\begin{thebibliography}{9}
+\bibitem{latex} Lamport, \LaTeX.
+\end{thebibliography}
+\end{lstlisting}
+
+  \item \textbf{交叉引用}
+\begin{lstlisting}
+\section{方法}\label{sec:method}
+详见第~\ref{sec:method} 节。
+\end{lstlisting}
+\end{enumerate}
+
+\section{常见问题与解决}
+\begin{itemize}
+  \item \textbf{中文乱码或字体缺失}：改用 XeLaTeX；文档类用 \texttt{ctexart}。
+  \item \textbf{图片不显示}：确认图片文件与 \texttt{.tex} 同目录，文件名与后缀大小写一致。
+  \item \textbf{Git 提交失败（没有暂存）}：先 \texttt{git add} 后 \texttt{git commit}。
+  \item \textbf{合并冲突}：编辑冲突文件，保留期望内容后 \texttt{git add} 再 \texttt{git commit}。
+  \item \textbf{远程拒绝}：检查权限与分支名（\texttt{main} vs \texttt{master}），首次推送用 \texttt{-u}。
+\end{itemize}
+
+\section{心得体会}
+Git 部分帮助我理解了工作区、暂存区与提交历史的关系，分支合并体现了协作与并行开发的价值；\LaTeX 部分让我体会到结构化写作的效率与高质量排版的可复用性。今后计划将两者结合：用 Git 管理 \LaTeX 论文与笔记，在分支上尝试不同写作方案，并通过远程仓库进行协作与备份。
+
+\section{github地址}
+https://github.com/tingol666/git2025q2.git
+\end{document}
