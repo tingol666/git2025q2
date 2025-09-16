@@ -1,0 +1,252 @@
+\documentclass[12pt]{ctexart}
+\usepackage{geometry}
+\geometry{a4paper,margin=2.5cm}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{float}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+  citecolor=blue
+}
+
+\lstset{
+  showstringspaces=false,
+  showspaces=false,
+  showtabs=false,
+  keepspaces=true
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  columns=fullflexible,
+  tabsize=2
+}
+
+\title{Shell 与 Vim 实验报告}
+\author{王杰（23160001074）}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{实验目的}
+\begin{itemize}
+  \item 掌握常用 Shell 基本命令、重定向与管道。
+  \item 掌握 Vim 常见编辑操作、查找替换与窗口管理。
+  \item 提升命令行环境下的文件管理与文本编辑效率。
+\end{itemize}
+
+\section{实验环境}
+\begin{itemize}
+  \item 操作系统：Windows 11（WSL2: Ubuntu 24.04）
+  \item Shell：\texttt{bash}
+  \item 编辑器：\texttt{Vim 9.x}
+  \item \LaTeX\ 编译器：\textbf{XeLaTeX}
+  \item 在线编辑：Overleaf
+\end{itemize}
+
+\section{练习内容}
+
+\subsection{Shell（10 个）}
+\begin{enumerate}
+  \item \textbf{查看当前路径与用户名}
+\begin{lstlisting}[language=bash]
+pwd
+whoami
+\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{image.png}
+\end{figure}
+  \item \textbf{列出目录内容（普通/详细/含隐藏）}
+\begin{lstlisting}[language=bash]
+ls
+ls -lah
+\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{image2.png}
+\end{figure}
+  \item \textbf{创建、进入与删除目录}
+\begin{lstlisting}[language=bash]
+mkdir lab01 && cd lab01
+cd ..
+rmdir lab01
+\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{image3.png}
+\end{figure}
+  \item \textbf{新建文件与查看内容}
+\begin{lstlisting}[language=bash]
+echo "Hello shell" > hello.txt
+cat hello.txt
+\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{image4.png}
+\end{figure}
+  \item \textbf{追加内容与行数统计}
+\begin{lstlisting}[language=bash]
+echo "line2" >> hello.txt
+wc -l hello.txt
+\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{image5.png}
+\end{figure}
+  \item \textbf{管道与过滤}
+\begin{lstlisting}[language=bash]
+ls /bin | head -n 5
+ls -l | grep '^d'   # 仅显示目录
+\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{image6.png}
+\end{figure}
+  \item \textbf{查找文件}
+\begin{lstlisting}[language=bash]
+find . -type f -name "*.txt"
+\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{image8.png}
+\end{figure}
+  \item \textbf{搜索文本}
+\begin{lstlisting}[language=bash]
+grep -n "line" hello.txt
+\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{image7.png}
+\end{figure}
+  \item \textbf{权限与执行脚本}
+\begin{lstlisting}[language=bash]
+printf '#!/usr/bin/env bash\necho Hi\n' > run.sh
+chmod +x run.sh
+./run.sh
+\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{image9.png}
+\end{figure}
+  \item \textbf{打包与查看压缩包内容}
+\begin{lstlisting}[language=bash]
+tar -czf hosts.tgz /etc/hosts
+tar -tzf hosts.tgz | head
+\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{image10.png}
+\end{figure}
+\end{enumerate}
+
+\subsection{Vim（10 个）}
+\begin{enumerate}
+  \item \textbf{启动、保存与退出}
+\begin{lstlisting}
+vim notes.txt
+# 在普通模式下输入:
+#   :w     保存
+#   :q     退出
+#   :wq    保存并退出
+#   :q!    强制不保存退出
+\end{lstlisting}
+
+  \item \textbf{进入插入模式与返回普通模式}
+\begin{lstlisting}
+# 普通模式下:
+i        # 在光标前插入
+a        # 在光标后插入
+o / O    # 另起下一/上一行插入
+<Esc>    # 返回普通模式
+\end{lstlisting}
+
+  \item \textbf{光标移动（高效导航）}
+\begin{lstlisting}
+h j k l  # 左 下 上 右
+w / b    # 下一个/上一个单词开头
+0 / $    # 行首 / 行尾
+gg / G   # 文件开头 / 结尾
+\end{lstlisting}
+
+  \item \textbf{查找与高亮}
+\begin{lstlisting}
+/pattern    # 向下查找
+n / N       # 下一个 / 上一个匹配
+:set hlsearch incsearch   # 高亮与增量查找
+\end{lstlisting}
+
+  \item \textbf{替换（当前行与全文）}
+\begin{lstlisting}
+:s/old/new/g         # 当前行全部替换
+:%s/old/new/gc       # 全文替换并逐个确认
+\end{lstlisting}
+
+  \item \textbf{撤销、重做与重复}
+\begin{lstlisting}
+u        # 撤销
+<C-r>    # 重做 (Ctrl+r)
+.        # 重复上一次操作
+\end{lstlisting}
+
+  \item \textbf{复制/粘贴/删除（操作行与词）}
+\begin{lstlisting}
+yy       # 复制当前行
+p        # 在光标后粘贴
+dd       # 删除（剪切）当前行
+dw / yw  # 删除/复制一个词
+x        # 删除一个字符
+\end{lstlisting}
+
+  \item \textbf{可视模式与缩进}
+\begin{lstlisting}
+v / V / <C-v>   # 字符/行/块可视
+> / <           # 右/左缩进已选文本
+=               # 自动对齐已选文本
+\end{lstlisting}
+
+  \item \textbf{分屏与窗口管理}
+\begin{lstlisting}
+:split file2.txt     # 水平分屏
+:vsplit file3.txt    # 垂直分屏
+<C-w> h/j/k/l        # 窗口间移动
+:close               # 关闭当前窗口
+\end{lstlisting}
+
+  \item \textbf{多缓冲区（多文件）切换}
+\begin{lstlisting}
+:args a.txt b.txt c.txt   # 打开多个文件
+:ls                        # 查看缓冲区
+:bn / :bp                  # 下一个/上一个缓冲
+:bd                        # 关闭当前缓冲
+\end{lstlisting}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\linewidth]{image11.png}
+\end{figure}
+\end{enumerate}
+
+\section{常见问题与解决}
+\begin{itemize}
+  \item \textbf{命令找不到（command not found）}：确认是否安装并在 \texttt{PATH} 中；WSL 下可用 \texttt{sudo apt install <pkg>} 安装。
+  \item \textbf{权限不足（Permission denied）}：脚本需加执行位 \texttt{chmod +x file.sh}，或用 \texttt{sudo} 执行需要管理员权限的命令。
+  \item \textbf{重定向覆盖文件}：使用 \texttt{>} 会覆盖，谨慎；若需追加用 \texttt{>>}。
+  \item \textbf{Vim 不能保存（E212: Can't open file for writing）}：无写权限目录，使用 \texttt{:w !sudo tee \%} 或在 Shell 中 \texttt{sudo vim file}。
+  \item \textbf{Vim 查找不高亮或不增量}：执行 \texttt{:set hlsearch incsearch}，写入 \texttt{\~/.vimrc} 持久化。
+  \item \textbf{分屏后方向键移动到中文输入法候选框}：保持普通模式下用 \texttt{<C-w> h/j/k/l} 移动窗口。
+\end{itemize}
+
+\section{心得体会}
+Shell 的管道、重定向与文本处理工具能高效完成日常文件操作；Vim 的模式化编辑在熟悉常用按键后能显著提升速度。将二者结合，在终端内即可完成“查找---编辑---验证”的快速闭环；后续计划把常用设置写入 \texttt{\~/.bashrc} 与 \texttt{\~/.vimrc}，进一步优化工作流。
+
+\section{github地址}
+\url{https://github.com/yourname/shell-vim-lab.git}
+
+\end{document}
