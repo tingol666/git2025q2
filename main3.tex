@@ -1,0 +1,270 @@
+\documentclass[12pt]{ctexart}
+\usepackage{geometry}
+\geometry{a4paper,margin=2.5cm}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{float}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+  citecolor=blue
+}
+
+\lstset{
+  showstringspaces=false,
+  showspaces=false,
+  showtabs=false,
+  keepspaces=true,
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  columns=fullflexible,
+  tabsize=2
+}
+
+\title{命令行、Python 与图像处理实验报告}
+\author{王杰（23160001074）}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{实验目的}
+\begin{itemize}
+  \item 掌握常见 Shell 工作流：管道/重定向、作业控制、别名与配置等。
+  \item 掌握 Python 基础语法：变量、流程控制、容器、函数、文件 I/O、异常、参数解析与虚拟环境。
+  \item 初步使用 Python 图像处理库（Pillow、OpenCV、scikit-image、imageio）完成简单图像任务。
+\end{itemize}
+
+\section{实验环境}
+\begin{itemize}
+  \item 操作系统：Windows 11（WSL2: Ubuntu 24.04）
+  \item Shell：\texttt{bash}（支持 \texttt{jobs}/\texttt{fg}/\texttt{bg}）
+  \item Python：\texttt{Python 3.11+}，\texttt{pip}，\texttt{venv}
+  \item 第三方库：\texttt{pillow}、\texttt{opencv-python}、\texttt{scikit-image}、\texttt{imageio}、\texttt{matplotlib}
+  \item \LaTeX\ 编译器：\textbf{XeLaTeX}；在线：Overleaf
+\end{itemize}
+
+\section{练习内容}
+
+\subsection{命令行环境}
+\begin{enumerate}
+  \item \textbf{查看命令帮助与手册}（快速定位用法）
+\begin{lstlisting}[language=bash]
+ls --help | head -n 10
+man grep    # q 退出；/pattern 搜索；n 跳下一个
+\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{image1.png}
+\end{figure}
+
+  \item \textbf{重定向与管道：去重计数 Top N}
+\begin{lstlisting}[language=bash]
+cat /var/log/syslog 2>/dev/null \
+| awk '{print $5}' | sort | uniq -c | sort -nr | head
+\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{image2.png}
+\end{figure}
+
+  \item \textbf{通配符与花括号扩展：批量造数据}
+\begin{lstlisting}[language=bash]
+mkdir demo && cd demo
+touch file-{a..c}{1..3}.txt
+ls file-a*.txt
+\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{image3.png}
+\end{figure}
+
+  \item \textbf{命令替换与子 shell}
+\begin{lstlisting}[language=bash]
+echo "Today is $(date +%F). Files here: $(ls | wc -l)."
+( cd /etc && echo "In /etc: $(pwd)" )
+\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{image4.png}
+\end{figure}
+
+  \item \textbf{环境变量与别名配置}
+\begin{lstlisting}[language=bash]
+echo $PATH
+export EDITOR=vim
+alias ll='ls -alh'     # 将别名写入 ~/.bashrc 可持久化
+\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{image5.png}
+\end{figure}
+
+  \item \textbf{作业控制与后台运行}（Ctrl+Z 暂停，\texttt{bg}/\texttt{fg} 切换）
+\begin{lstlisting}[language=bash]
+sleep 1000 &
+jobs                 # 查看作业
+fg %1                # 回到前台
+sleep 2000 & disown  # 让进程脱离终端
+\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{image6.png}
+\end{figure}
+
+  \item \textbf{查找并结束进程（更优雅的方式）}
+\begin{lstlisting}[language=bash]
+pgrep -af sleep      # 查 PID
+pkill -f sleep       # 按名称结束，不手敲 PID
+\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\linewidth]{image7.png}
+\end{figure}
+
+\end{enumerate}
+
+
+\subsection{Python 基础}
+\begin{enumerate}
+  \item \textbf{Hello, World 与 shebang}
+\begin{lstlisting}[language=python]
+#!/usr/bin/env python3
+print("Hello, World")
+\end{lstlisting}
+
+
+  \item \textbf{变量与类型、f-string}
+\begin{lstlisting}[language=python]
+name = "Alice"; score = 92.5
+print(f"{name}'s score is {score:.1f}")
+\end{lstlisting}
+
+  \item \textbf{条件与循环：奇数求和}
+\begin{lstlisting}[language=python]
+total = 0
+for i in range(1, 100):
+    if i % 2 == 1:
+        total += i
+print(total)
+\end{lstlisting}
+
+  \item \textbf{列表/字典推导式}
+\begin{lstlisting}[language=python]
+squares = [x*x for x in range(6)]
+freq = {ch: "hello world".count(ch) for ch in set("hello world")}
+print(squares); print(freq)
+\end{lstlisting}
+
+  \item \textbf{函数与类型注解、文档字符串}
+\begin{lstlisting}[language=python]
+def area(w: float, h: float) -> float:
+    """Return rectangle area = w*h."""
+    return w * h
+
+print(area(3.0, 4.5))
+\end{lstlisting}
+
+  \item \textbf{文件 I/O（UTF-8）}
+\begin{lstlisting}[language=python]
+from pathlib import Path
+Path("note.txt").write_text("第一行\n第二行\n", encoding="utf-8")
+print(Path("note.txt").read_text(encoding="utf-8"))
+\end{lstlisting}
+
+  \item \textbf{异常处理（try/except/else/finally）}
+\begin{lstlisting}[language=python]
+try:
+    x = int(input("Enter an integer: "))
+except ValueError as e:
+    print("Invalid!", e)
+else:
+    print("x^2 =", x*x)
+finally:
+    print("Done.")
+\end{lstlisting}
+
+  \item \textbf{命令行参数解析（\texttt{argparse})}
+\begin{lstlisting}[language=python]
+# save as add.py: python add.py 3 5 -> 8
+import argparse
+p = argparse.ArgumentParser()
+p.add_argument("a", type=int); p.add_argument("b", type=int)
+args = p.parse_args()
+print(args.a + args.b)
+\end{lstlisting}
+
+  \item \textbf{虚拟环境与依赖导出}
+\begin{lstlisting}[language=bash]
+python -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install requests
+pip freeze > requirements.txt
+\end{lstlisting}
+\end{enumerate}
+
+\subsection{图像处理}
+\begin{enumerate}
+  \item \textbf{Pillow：打开/缩放/灰度化/保存}
+\begin{lstlisting}[language=python]
+from PIL import Image
+im = Image.open("input.jpg")
+im2 = im.resize((512, 512)).convert("L")
+im2.save("output_pillow_gray.jpg")
+\end{lstlisting}
+
+  \item \textbf{OpenCV：高斯模糊 + Canny 边缘}
+\begin{lstlisting}[language=python]
+import cv2
+img = cv2.imread("input.jpg")
+blur = cv2.GaussianBlur(img, (5,5), 0)
+edge = cv2.Canny(blur, 100, 200)
+cv2.imwrite("output_cv_edge.png", edge)
+\end{lstlisting}
+
+  \item \textbf{scikit-image：Otsu 二值化}
+\begin{lstlisting}[language=python]
+from skimage import io, filters, img_as_ubyte
+img = io.imread("input.jpg", as_gray=True)
+th = filters.threshold_otsu(img)
+binary = img > th
+io.imsave("output_skimage_binary.png", img_as_ubyte(binary))
+\end{lstlisting}
+
+  \item \textbf{imageio：合成 GIF（配合 matplotlib 预览）}
+\begin{lstlisting}[language=python]
+import imageio.v2 as imageio
+import glob
+frames = [imageio.imread(p) for p in sorted(glob.glob("frames/*.png"))]
+imageio.mimsave("anim.gif", frames, duration=0.08)
+print("Saved anim.gif")
+\end{lstlisting}
+\end{enumerate}
+
+\section{常见问题与解决}
+\begin{itemize}
+  \item \textbf{命令行作业控制失效}：确认当前 Shell 为 \texttt{bash}/\texttt{zsh}，并使用 \texttt{jobs}/\texttt{fg}/\texttt{bg}；脱离终端用 \texttt{disown} 或 \texttt{nohup}。
+  \item \textbf{Unicode 编码问题}：统一使用 UTF-8；文件读写指定 \texttt{encoding="utf-8"}。
+
+\section{心得体会}
+通过 Missing Semester 的作业控制、别名与配置，命令行工作流显著顺滑；Python 基础结合 \texttt{argparse}/\texttt{pathlib} 等现代用法更易维护；图像处理库各擅胜场——Pillow 上手最快、OpenCV 算法丰富、scikit-image API 语义清晰、imageio 用于读写动画便捷。将三者结合，可以快速完成“命令行调度—Python 处理—结果产出”的闭环。
+
+\section{参考资料}
+\begin{itemize}
+  \item 命令行环境（中文）：\url{https://missing-semester-cn.github.io/2020/command-line/}
+  \item Command-line Environment（英文原文）：\url{https://missing.csail.mit.edu/2020/command-line/}
+  \item Python 基础教程/3.x 教程（菜鸟教程）：\url{https://www.runoob.com/python/python-tutorial.html}，\url{https://www.runoob.com/python3/python3-tutorial.html}
+  \item CSDN：【Python】推荐五个常用的图像处理库：\url{https://blog.csdn.net/sgzqc/article/details/124871774}
+\end{itemize}
+
+\section{github地址}
+\url{https://github.com/tingol666/git2025q2.git}
+
+\end{document}
